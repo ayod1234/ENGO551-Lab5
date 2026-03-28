@@ -75,7 +75,7 @@ function updateMapMarker(lat, lon, temp) {
     }
 
     // Set Popup and Pan Map
-    marker.bindPopup(`<b>${topic}</b><br>Live Temp: ${temp}°C`).openPopup();
+    marker.bindPopup(`<b>engo551/ayooluwa_durojaiye/my_temperature</b><br>Live Temp: ${temp}°C`).openPopup();
     map.flyTo([lat, lon], 12); // 'flyTo' creates a smooth animation for the demo
 }
 
@@ -144,4 +144,12 @@ function shareStatus() {
     }, (error) => {
         alert("Geolocation failed: " + error.message);
     });
+}
+
+
+function toggleInputs(isConnected) {
+    document.getElementById('host').disabled = isConnected;
+    document.getElementById('port').disabled = isConnected;
+    document.getElementById('startBtn').disabled = isConnected;
+    document.getElementById('endBtn').disabled = !isConnected;
 }
