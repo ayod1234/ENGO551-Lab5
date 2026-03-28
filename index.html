@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ayooluwa - Home</title>
+    <title>Ayooluwa - Geoweb App</title>
     <link rel="stylesheet" type="text/css" href="mystyle.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -11,9 +11,28 @@
 <body class="bg-dark text-white">
     
     <main class="container mt-5">
-        <hr class="my-4 text-white">
+        <h1 class="mb-4">Geoweb MQTT Application</h1>
 
-        <div id="publishSection" class="mb-3">
+        <section id="configSection" class="mb-4 p-3 border border-secondary rounded">
+            <h3>Broker Configuration</h3>
+            <div class="row g-2">
+                <div class="col-md-8">
+                    <input type="text" id="host" class="form-control" placeholder="Host (e.g., test.mosquitto.org)">
+                </div>
+                <div class="col-md-4">
+                    <input type="number" id="port" class="form-control" placeholder="Port (e.g., 8081)">
+                </div>
+            </div>
+            <div class="mt-3">
+                <button id="startBtn" class="btn btn-success me-2" onclick="connect()">Start Connection</button>
+                <button id="endBtn" class="btn btn-danger" onclick="disconnect()" disabled>End Connection</button>
+            </div>
+            <div id="status" class="alert alert-secondary mt-3">Status: Disconnected</div>
+        </section>
+
+        <hr class="my-4">
+
+        <section id="publishSection" class="mb-4">
             <h3>Publish Message</h3>
             <div class="mb-3">
                 <label for="pubTopic" class="form-label">Topic</label>
@@ -21,20 +40,19 @@
             </div>
             <div class="mb-3">
                 <label for="pubMessage" class="form-label">Message</label>
-                <textarea id="pubMessage" class="form-control" rows="3" placeholder="Enter your message here..."></textarea>
+                <textarea id="pubMessage" class="form-control" rows="2" placeholder="Enter message..."></textarea>
             </div>
-            <div id="statusSection" class="mt-4 p-3 border border-primary rounded">
+            <button id="pubBtn" class="btn btn-primary" onclick="publishMessage()">Publish Message</button>
+        </section>
+
+        <section id="statusSection" class="p-3 border border-primary rounded mb-5">
             <h3>Live Geomatics Status</h3>
-            <p>Click below to broadcast your GPS location and a random temperature.</p>
-            <button id="shareStatusBtn" class="btn btn-warning w-100" onclick="shareStatus()">
+            <p>Broadcasts your GPS location and temperature as GeoJSON.</p>
+            <button id="shareStatusBtn" class="btn btn-warning w-100 fw-bold" onclick="shareStatus()">
                 📍 Share My Status (GeoJSON)
             </button>
             <div id="geoStatus" class="small mt-2 text-info"></div>
-        </div>
-            <button id="pubBtn" class="btn btn-primary" onclick="publishMessage()">Publish Message</button>
-        </div>
-    </main>
-    <div id="status" class="alert alert-secondary mt-3">Status: Disconnected</div>
+        </section>
     </main>
 
     <footer class="container mt-5 pt-3 border-top">
