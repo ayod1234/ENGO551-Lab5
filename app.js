@@ -36,40 +36,47 @@ function connect() {
         client.subscribe("engo551/ayooluwa_durojaiye/my_temperature");
     });
 
-    // Handle Incoming Messages
     client.on('message', (topic, message) => {
-        if (topic === "engo551/ayooluwa_durojaiye/my_temperature") {
+    if (topic === "engo551/ayooluwa_durojaiye/my_temperature") {
+        try {
             const data = JSON.parse(message.toString());
             const [lon, lat] = data.geometry.coordinates;
             const temp = data.properties.temperature;
 
+            // Update the UI
             updateMapMarker(lat, lon, temp);
+            
+            console.log("Remote update received from MQTTX!");
+        } catch (e) {
+            console.error("Received message was not valid JSON", e);
         }
-    });
-
+    }
+});
     // ... (rest of your existing event listeners: offline, reconnect, error)
 }
+
+
 
 function updateMapMarker(lat, lon, temp) {
     const color = getMarkerColor(temp);
     
-    // Create a custom colored icon using inline SVG
+    // Custom Icon Logic
     const coloredIcon = L.divIcon({
-        className: 'custom-div-icon',
-        html: `<div style='background-color:${color}; width:20px; height:20px; border-radius:50%; border:2px solid white;'></div>`,
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
+        className: 'custom-marker',
+        html: `<div style='background-color:${color}; width:18px; height:18px; border-radius:50%; border:2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);'></div>`,
+        iconSize: [18, 18],
+        iconAnchor: [9, 9]
     });
 
-    if (marker) {
-        marker.setLatLng([lat, lon]).setIcon(coloredIcon);
-    } else {
+    if (!marker) {
         marker = L.marker([lat, lon], { icon: coloredIcon }).addTo(map);
+    } else {
+        marker.setLatLng([lat, lon]).setIcon(coloredIcon);
     }
 
-    // Update Popup content
-    marker.bindPopup(`<b>Ayooluwa Durojaiye</b><br>Temperature: ${temp}°C`).openPopup();
-    map.setView([lat, lon], 15);
+    // Set Popup and Pan Map
+    marker.bindPopup(`<b>${topic}</b><br>Live Temp: ${temp}°C`).openPopup();
+    map.flyTo([lat, lon], 12); // 'flyTo' creates a smooth animation for the demo
 }
 
 // ... (keep your existing disconnect, publishMessage, and shareStatus functions)
