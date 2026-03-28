@@ -11,16 +11,16 @@
 <body class="bg-dark text-white">
     
     <main class="container mt-5">
-        <h2>Broker Configuration</h2>
-        <div class="mb-3">
-            <input type="text" id="host" class="form-control mb-2" placeholder="Broker Host (e.g., broker.hivemq.com)">
-            <input type="number" id="port" class="form-control mb-2" placeholder="Port (e.g., 8884)">
-            <button class="btn btn-primary" onclick="connect()">Connect</button>
-        </div>
-
-        <button class="btn btn-success" onclick="sendMessage()">Send Test Message</button>
+    <h2>Broker Configuration</h2>
+    <div class="mb-3">
+        <input type="text" id="host" class="form-control mb-2" placeholder="Broker Host (e.g., broker.hivemq.com)">
+        <input type="number" id="port" class="form-control mb-2" placeholder="Port (e.g., 8081)">
         
-        <div id="status" class="alert alert-secondary">Status: Disconnected</div>
+        <button id="startBtn" class="btn btn-success" onclick="connect()">Start Connection</button>
+        <button id="endBtn" class="btn btn-danger" onclick="disconnect()" disabled>End Connection</button>
+    </div>
+    
+    <div id="status" class="alert alert-secondary mt-3">Status: Disconnected</div>
     </main>
 
     <footer class="container mt-5 pt-3 border-top">
