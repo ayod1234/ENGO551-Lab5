@@ -83,3 +83,57 @@ function disconnect() {
         });
     }
 }
+
+
+function shareStatus() {
+    if (!client || !client.connected) {
+        alert("Please connect to the broker first!");
+        return;
+    }
+
+    const geoStatus = document.getElementById('geoStatus');
+    geoStatus.innerText = "Locating...";
+
+    // 1. Get GPS Position
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        
+        // 2. Generate Random Temperature (e.g., between -10 and 30)
+        const temp = (Math.random() * (30 - (-10)) + (-10)).toFixed(2);
+
+        // 3. Create GeoJSON Message
+        const geojsonMsg = {
+            type: "Feature",
+            geometry: {
+                type: "Point",
+                coordinates: [lon, lat] // Note: GeoJSON is [Longitude, Latitude]
+            },
+            properties: {
+                name: "Ayooluwa Durojaiye",
+                temperature: parseFloat(temp),
+                unit: "Celsius",
+                timestamp: new Date().toISOString()
+            }
+        };
+
+        // 4. Define Topic (Pattern: course/name/my_temperature)
+        // Ensure no spaces are used
+        const topic = "engo551/ayooluwa_durojaiye/my_temperature";
+
+        // 5. Publish
+        client.publish(topic, JSON.stringify(geojsonMsg));
+        
+        geoStatus.innerText = `Sent: ${lat.toFixed(4)}, ${lon.toFixed(4)} @ ${temp}°C`;
+        console.log("Published GeoJSON:", geojsonMsg);
+
+    }, (error) => {
+        geoStatus.innerText = "Error: " + error.message;
+        alert("Unable to retrieve location. Ensure you allowed permissions.");
+    });
+}
