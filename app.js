@@ -1,11 +1,23 @@
 let client;
+let map;
+let marker;
 
-// Helper to lock/unlock UI based on connection state
-function toggleInputs(isConnected) {
-    document.getElementById('host').disabled = isConnected;
-    document.getElementById('port').disabled = isConnected;
-    document.getElementById('startBtn').disabled = isConnected;
-    document.getElementById('endBtn').disabled = !isConnected;
+// Initialize Map
+function initMap() {
+    map = L.map('map').setView([51.0447, -114.0719], 13); // Default to Calgary
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+}
+
+// Call this once when the page loads
+window.onload = initMap;
+
+function getMarkerColor(temp) {
+    if (temp >= -40 && temp < 10) return "blue";
+    if (temp >= 10 && temp < 30) return "green";
+    if (temp >= 30 && temp <= 60) return "red";
+    return "black"; // Default
 }
 
 function connect() {
@@ -13,44 +25,54 @@ function connect() {
     const port = document.getElementById('port').value;
     const status = document.getElementById('status');
 
-    if (!host || !port) {
-        alert("Please enter both host and port.");
-        return;
-    }
-
-    const options = {
-        reconnectPeriod: 5000,
-        connectTimeout: 30 * 1000,
-    };
-
-    status.className = "alert alert-warning mt-3";
-    status.innerText = "Attempting to connect...";
-    
-    // Using wss for GitHub Pages compatibility
-    client = mqtt.connect(`wss://${host}:${port}/mqtt`, options);
+    client = mqtt.connect(`wss://${host}:${port}/mqtt`, { reconnectPeriod: 5000 });
 
     client.on('connect', () => {
         status.className = "alert alert-success mt-3";
         status.innerText = "Connected to " + host;
         toggleInputs(true);
+        
+        // SUBSCRIBE to your temperature topic to hear your own updates
+        client.subscribe("engo551/ayooluwa_durojaiye/my_temperature");
     });
 
-    client.on('offline', () => {
-        status.className = "alert alert-danger mt-3";
-        status.innerText = "Connection lost. Device offline.";
+    // Handle Incoming Messages
+    client.on('message', (topic, message) => {
+        if (topic === "engo551/ayooluwa_durojaiye/my_temperature") {
+            const data = JSON.parse(message.toString());
+            const [lon, lat] = data.geometry.coordinates;
+            const temp = data.properties.temperature;
+
+            updateMapMarker(lat, lon, temp);
+        }
     });
 
-    client.on('reconnect', () => {
-        status.className = "alert alert-info mt-3";
-        status.innerText = "Disconnected. Retrying...";
-    });
-
-    client.on('error', (err) => {
-        status.className = "alert alert-danger mt-3";
-        status.innerText = "Error: " + err.message;
-        toggleInputs(false);
-    });
+    // ... (rest of your existing event listeners: offline, reconnect, error)
 }
+
+function updateMapMarker(lat, lon, temp) {
+    const color = getMarkerColor(temp);
+    
+    // Create a custom colored icon using inline SVG
+    const coloredIcon = L.divIcon({
+        className: 'custom-div-icon',
+        html: `<div style='background-color:${color}; width:20px; height:20px; border-radius:50%; border:2px solid white;'></div>`,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+    });
+
+    if (marker) {
+        marker.setLatLng([lat, lon]).setIcon(coloredIcon);
+    } else {
+        marker = L.marker([lat, lon], { icon: coloredIcon }).addTo(map);
+    }
+
+    // Update Popup content
+    marker.bindPopup(`<b>Ayooluwa Durojaiye</b><br>Temperature: ${temp}°C`).openPopup();
+    map.setView([lat, lon], 15);
+}
+
+// ... (keep your existing disconnect, publishMessage, and shareStatus functions)
 
 function disconnect() {
     if (client) {
