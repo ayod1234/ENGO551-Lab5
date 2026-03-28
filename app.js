@@ -3,15 +3,24 @@ function connect() {
     const port = document.getElementById('port').value;
     const status = document.getElementById('status');
 
-    // GitHub Pages is HTTPS, so you MUST use 'wss' (Secure WebSockets)
+    if (!host || !port) {
+        status.innerText = "Status: Please enter host and port";
+        return;
+    }
+
+    status.innerText = "Status: Connecting...";
+
+    // GitHub Pages is HTTPS, so we use 'wss'
     const client = mqtt.connect(`wss://${host}:${port}/mqtt`);
 
     client.on('connect', () => {
+        status.className = "alert alert-success";
         status.innerText = "Status: Connected to " + host;
-        console.log("Success!");
+        console.log("Connected successfully!");
     });
 
     client.on('error', (err) => {
+        status.className = "alert alert-danger";
         status.innerText = "Status: Connection Failed";
         console.error(err);
     });
