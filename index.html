@@ -11,15 +11,21 @@
 <body class="bg-dark text-white">
     
     <main class="container mt-5">
-    <h2>Broker Configuration</h2>
-    <div class="mb-3">
-        <input type="text" id="host" class="form-control mb-2" placeholder="Broker Host (e.g., broker.hivemq.com)">
-        <input type="number" id="port" class="form-control mb-2" placeholder="Port (e.g., 8081)">
-        
-        <button id="startBtn" class="btn btn-success" onclick="connect()">Start Connection</button>
-        <button id="endBtn" class="btn btn-danger" onclick="disconnect()" disabled>End Connection</button>
-    </div>
-    
+        <hr class="my-4 text-white">
+
+        <div id="publishSection" class="mb-3">
+            <h3>Publish Message</h3>
+            <div class="mb-3">
+                <label for="pubTopic" class="form-label">Topic</label>
+                <input type="text" id="pubTopic" class="form-control" placeholder="e.g., engo551/ayooluwa/test">
+            </div>
+            <div class="mb-3">
+                <label for="pubMessage" class="form-label">Message</label>
+                <textarea id="pubMessage" class="form-control" rows="3" placeholder="Enter your message here..."></textarea>
+            </div>
+            <button id="pubBtn" class="btn btn-primary" onclick="publishMessage()">Publish Message</button>
+        </div>
+    </main>
     <div id="status" class="alert alert-secondary mt-3">Status: Disconnected</div>
     </main>
 
