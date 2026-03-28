@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %} Calgary Building Permits {% endblock %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Geoweb App</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body>
+    <h2>Broker Configuration</h2>
+    <input type="text" id="host" placeholder="Broker Host (e.g., broker.hivemq.com)">
+    <input type="number" id="port" placeholder="Port (e.g., 8884)">
+    <button onclick="connect()">Connect</button>
+    
+    <div id="status">Status: Disconnected</div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,150 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(55, 58, 77);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    
+
+    padding-bottom: 0; 
+}
+
+
+.logo{
+    font-size: 2rem;
+    font-weight: 700;
+    color: aqua;
+    letter-spacing: 1px;
+}
+
+.logo img{
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+
+nav{
+    width:100%;
+    padding: 1rem 5%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0;
+    backdrop-filter: blur(15px);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+.nav-links{
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    color: aquamarine;
+    
+}
+
+.nav-links li a{
+    position: relative;
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: aqua;
+    transition: 0.3s;
+}
+
+.nav-links li a:hover{
+    color: blueviolet;
+    text-shadow: 0 0 10px blue;
+}
+
+.btns{
+    display: flex;
+}
+
+.custom-nav-btn {
+    display: inline-block; /* Essential for anchor tags to behave like buttons */
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    background-color: #38bdf8 !important;
+    color: #0f172a !important;
+    box-shadow: 0 0 15px #38bdf8;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.custom-nav-btn:hover {
+    background-color: #0aa9f3 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 25px #0aa9f3;
+    text-decoration: none;
+}
+
+footer{
+    margin-top: auto;
+    width: 100%;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid rgba(60, 255, 255, 0.1);
+}
+
+h1{
+    text-align: center;
+    padding: 8%;
+}
+
+.form{
+    text-align: center;
+
+}
+
+.display_list{
+    position: absolute;
+     top: 50%; 
+     left: 50%; 
+     transform: translate(-16%, 200%); 
+     width: 100%; 
+     max-width: 500px;
+     max-height: 150px;
+}
+
+
+
+.results-container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 250px auto 50px auto;
+}
+
+.custom-table {
+    background: rgba(60, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    color: white;
+}
+
+.custom-table thead {
+    background-color: rgba(0, 255, 255, 0.1);
+    color: aqua;
+}
+
+.custom-table tbody tr:hover {
+    background-color: rgba(56, 189, 248, 0.2) !important;
+    transition: 0.3s;
+} 
