@@ -25,3 +25,18 @@ function connect() {
         console.error(err);
     });
 }
+
+
+// Add this inside your script
+function sendMessage() {
+    // Check if client exists and is connected
+    if (client && client.connected) {
+        const topic = "ayooluwa/geoweb/test";
+        const message = "Hello from the Browser!";
+        
+        client.publish(topic, message);
+        console.log("Message sent to topic:", topic);
+    } else {
+        alert("Connect to the broker first!");
+    }
+}
