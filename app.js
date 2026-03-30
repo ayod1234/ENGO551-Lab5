@@ -37,22 +37,36 @@ function connect() {
     });
 
     client.on('message', (topic, message) => {
-    if (topic === "engo551/ayooluwa_durojaiye/my_temperature") {
-        try {
-            const data = JSON.parse(message.toString());
-            const [lon, lat] = data.geometry.coordinates;
-            const temp = data.properties.temperature;
+        if (topic === "engo551/ayooluwa_durojaiye/my_temperature") {
+            try {
+                const data = JSON.parse(message.toString());
+                const [lon, lat] = data.geometry.coordinates;
+                const temp = data.properties.temperature;
 
-            // Update the UI
-            updateMapMarker(lat, lon, temp);
-            
-            console.log("Remote update received from MQTTX!");
-        } catch (e) {
-            console.error("Received message was not valid JSON", e);
+                // Update the UI
+                updateMapMarker(lat, lon, temp);
+                
+                console.log("Remote update received from MQTTX!");
+            } catch (e) {
+                console.error("Received message was not valid JSON", e);
+            }
         }
-    }
-});
-    // ... (rest of your existing event listeners: offline, reconnect, error)
+    });
+    client.on('reconnect', () => {
+    status.className = "alert alert-warning mt-3";
+    status.innerText = "Attempting to reconnect...";
+    });
+
+    client.on('offline', () => {
+        status.className = "alert alert-danger mt-3";
+        status.innerText = "Status: Offline / Connection Lost";
+    });
+
+    client.on('error', (err) => {
+        console.error("Connection error: ", err);
+        status.className = "alert alert-danger mt-3";
+        status.innerText = "Error: " + err.message;
+    });
 }
 
 
